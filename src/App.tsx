@@ -12,6 +12,7 @@ import Usuarios from './pages/Usuarios';
 import Perfil from './pages/Perfil';
 import Organismos from './pages/Organismos';
 import TiposDocumento from './pages/TiposDocumento';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           
           <Route path="/" element={<Layout />}>
-            <Route index element={<Navigate to="/entradas" replace />} />
+            <Route index element={<Navigate to="/dashboard" replace />} />
+            <Route path="dashboard" element={<Dashboard />} />
             
             {/* Rotas Comuns */}
             <Route path="entradas" element={<Entradas />} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation, Navigate } from 'react-router-dom';
-import { FileText, Send, Search, BarChart2, Settings, User, Users, Building, FileType, LogOut } from 'lucide-react';
+import { FileText, Send, Search, BarChart2, Settings, User, Users, Building, FileType, LogOut, Home } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Layout() {
@@ -18,6 +18,7 @@ export default function Layout() {
       { icon: Building, label: 'Gerenciar Organismo', path: '/organismos' },
       { icon: FileType, label: 'Tipo de documento', path: '/tipos-documento' },
     ] : []),
+    { icon: Home, label: 'Página Inicial', path: '/dashboard' },
     { icon: FileText, label: 'Entrada de documentos', path: '/entradas' },
     { icon: Send, label: 'Saída de documentos', path: '/saidas' },
     { icon: Search, label: 'Consultar documento', path: '/consulta' },

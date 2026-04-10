@@ -29,14 +29,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { data: profile, error } = await supabase
         .from('profiles')
-        .select(`
-          *,
-          organismos ( nome )
-        `)
+        .select(`*, organismos ( nome )`)
         .eq('id', userId)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === 'PGRST116') {
+          const { data: newProfile, error: insertError } = await supabase
+            .from('profiles')
+            .insert([{ id: userId, nome_completo: email.split('@')[0], role: 'user' }])
+            .select(`*, organismos ( nome )`)
+            .single();
+            
+          if (!insertError && newProfile) {
+            setUser({
+              id: newProfile.id,
+              email: email,
+              nome: newProfile.nome_completo,
+              organismo: newProfile.organismos?.nome || 'Organismo não definido',
+              organismo_id: newProfile.organismo_id
+            });
+            setRole(newProfile.role as Role);
+            return;
+          }
+        }
+        throw error;
+      }
 
       if (profile) {
         setUser({
@@ -50,6 +68,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error('Erro ao buscar perfil:', error);
+      setUser({
+        id: userId,
+        email: email,
+        nome: email.split('@')[0],
+        organismo: 'Perfil Pendente',
+        organismo_id: ''
+      });
+      setRole('user');
     } finally {
       setLoading(false);
     }
